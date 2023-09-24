@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="show" width="800">
+  <v-dialog v-model="dialogVisible" width="800">
     <v-card v-if="selected_pokemon" class="px-4">
       <v-container>
         <v-row class="d-flex align-center">
@@ -93,6 +93,11 @@ export default {
     show: Boolean,
     selected_pokemon: Object,
   },
+  data() {
+    return {
+      dialogVisible: this.show, // Use a local variable to manage dialog visibility
+    }
+  },
   methods: {
     get_name(pokemon) {
       return pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
@@ -154,9 +159,14 @@ export default {
     },
   },
   watch: {
-    show() {
-      this.$emit("update:show", this.show);
+    show(newShowValue) {
+      // Update the local variable when the prop changes
+      this.dialogVisible = newShowValue;
     },
-  },
+    dialogVisible(newDialogVisibleValue) {
+      // Emit an event to notify the parent component of the changes
+      this.$emit("update:show", newDialogVisibleValue);
+    },
+  }
 };
 </script>
